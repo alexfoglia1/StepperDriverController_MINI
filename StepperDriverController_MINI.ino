@@ -8,7 +8,7 @@
 #include "Motor.h"
 
 #define MAJOR_V '1'
-#define MINOR_V '0'
+#define MINOR_V '1'
 #define STAGE_V 'B'
 
 #define BTN_MASK(BTN)(1 << BTN)
@@ -138,11 +138,6 @@ UserEvent readUserEvent(int curMillis)
 
 void setup()
 {
-  // set AD prescale to 16
-  sbi(ADCSRA,ADPS2);
-  cbi(ADCSRA,ADPS1);
-  cbi(ADCSRA,ADPS0);  
-
   Serial.begin(115200);
   
   pinMode(RESET, OUTPUT);
@@ -167,7 +162,7 @@ void setup()
 
 
 
-
+int lastPot = -1;
 void loop()
 {
   long t0 = micros();
@@ -175,11 +170,21 @@ void loop()
 
   if (isStepperMoving)
   {
-    int stepDelay = VEL_TO_STEP_DELAY[(int)(eepromParams.Values.velErog)];
+    int aIn = analogRead(POT_PIN);
+    if (lastPot == -1 || (abs(lastPot - aIn) < 100))
+    {
+      lastPot = aIn;
+    }
+    int vel = map(lastPot, 0, 1023, 0, MAX_VEL_INT);
+    int stepDelay = VEL_TO_STEP_DELAY[vel];
+    //char prompt[255];
+    //sprintf(prompt, "aIn(%d) vel(%d) stepDelay(%d)\n", aIn, vel, stepDelay);
+    //Serial.println(prompt);
     motorStep(stepDelay);
   }
   else
   {
+    lastPot = -1;
     motorPower(false);
     isStepperMoving = false;
   }

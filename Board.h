@@ -22,6 +22,7 @@
 #define DIR_MASK     0x02
 #define PROBE_MASK   0x01
 
+#define POT_PIN   A4
 #define BUTTON_IN A2
 #define BUTTON_1 1014
 #define BUTTON_2 1004
