@@ -26,11 +26,13 @@ typedef union
     struct
     {
         uint8_t get_btn_state   :1;
-        uint8_t get_analog_in   :1;
+        uint8_t get_analog2_in  :1;
+        uint8_t get_analog5_in  :1;
         uint8_t get_btn_12_val  :1;
         uint8_t get_btn_345_val :1;
         uint8_t set_btn_val     :1;
-        uint8_t zero            :3;
+        uint8_t get_sw_ver      :1;
+        uint8_t zero            :1;
     } Bits;
     uint8_t Byte;
 } maint_header_byte_2;

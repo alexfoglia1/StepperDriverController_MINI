@@ -3,6 +3,11 @@
 
 #include <avr/io.h>
 
+#define MAJOR_V '1'
+#define MINOR_V '1'
+#define STAGE_V 'B'
+#define SW_PN   'M'
+
 #ifndef cbi
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
 #endif
@@ -22,7 +27,7 @@
 #define DIR_MASK     0x02
 #define PROBE_MASK   0x01
 
-#define POT_PIN   A4
+#define POT_PIN   A5
 #define BUTTON_IN A2
 #define BUTTON_1 1014
 #define BUTTON_2 1004
