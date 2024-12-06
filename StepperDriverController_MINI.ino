@@ -136,23 +136,25 @@ void setup()
 {
   Serial.begin(115200);
   
-  pinMode(RESET, OUTPUT);
-  pinMode(SLEEP, OUTPUT);
-  pinMode(STEP, OUTPUT);
-  pinMode(DIR, OUTPUT);
+  pinMode(DIR_P, OUTPUT);
+  pinMode(DIR_M, OUTPUT);
+  pinMode(STEP_P, OUTPUT);
+  pinMode(STEP_M, OUTPUT);
   pinMode(PROBE, OUTPUT);
 
-  motorPower(false);
+//  motorPower(false);
+  digitalWrite(STEP_P, HIGH);
+  digitalWrite(DIR_P, HIGH);
     
   readEepromParams();
   
   if (eepromParams.Values.curDirection)
   {
-    PORTB |= DIR_MASK;
+    PORTB |= DIR_M_MASK;
   }
   else
   {
-    PORTB &= ~DIR_MASK;
+    PORTB &= ~DIR_M_MASK;
   }
 }
 
@@ -181,21 +183,27 @@ void loop()
   else
   {
     lastPot = -1;
+#ifdef BOARD_REVB    
     motorPower(false);
+#endif
     isStepperMoving = false;
   }
   
   UserEvent e = readUserEvent(curMillis);
   
-  if (e == BTN_1_RELEASE)
+  if (e == BTN_1_RELEASE && !isStepperMoving)
   {
     isStepperMoving = true;
+#ifdef BOARD_REVB    
     motorPower(true);
+#endif
   }
-  else if (e == BTN_2_RELEASE)
+  else if (e == BTN_2_PRESSED && isStepperMoving)
   {
     isStepperMoving = false;
+#ifdef BOARD_REVB    
     motorPower(false);
+#endif  
   }
 
   if (EEPROM_UPDATE && !isStepperMoving)
