@@ -37,18 +37,20 @@ void data_ingest(maint_header_t* rxHeader, bool* eepromUpdate, bool* stepperMovi
   if (rxHeader->Bytes.byte_1.Bits.motor_move)
   {
     *stepperMoving = !*stepperMoving;
+#ifdef BOARD_REV_B
     motorPower(*stepperMoving);
+#endif
   }
   if (rxHeader->Bytes.byte_1.Bits.invert_dir)
   {
     eepromParams.Values.curDirection = !eepromParams.Values.curDirection;
     if (eepromParams.Values.curDirection)
     {
-      PORTB |= DIR_MASK;
+      PORTB |= DIR_M_MASK;
     }
     else
     {
-      PORTB &= ~DIR_MASK;
+      PORTB &= ~DIR_M_MASK;
     }
 
     *eepromUpdate = true;
@@ -101,6 +103,7 @@ void data_ingest(maint_header_t* rxHeader, bool* eepromUpdate, bool* stepperMovi
     uint16_t aIn = analogRead(BUTTON_IN);
     Serial.write((aIn & 0xFF00) >> 8);
     Serial.write((aIn & 0x00FF));
+    
   }
   if (rxHeader->Bytes.byte_2.Bits.get_analog5_in)
   {
