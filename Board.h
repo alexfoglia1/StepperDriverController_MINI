@@ -4,7 +4,7 @@
 #include <avr/io.h>
 
 #define MAJOR_V '1'
-#define MINOR_V '2'
+#define MINOR_V '3'
 #define STAGE_V 'B'
 #define SW_PN   'M'
 
