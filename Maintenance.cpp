@@ -144,7 +144,7 @@ void data_ingest(maint_header_t* rxHeader, bool* eepromUpdate, bool* stepperMovi
         Serial.write(expectedBytes[idx]);
         idx += 1;
       }
-      if (idx == 10) break;
+      if (idx == 4) break;
     }
 
     eepromParams.Values.btn1 = (expectedBytes[0] << 8 | expectedBytes[1]);

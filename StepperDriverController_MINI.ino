@@ -143,7 +143,8 @@ void setup()
   pinMode(DIR_M, OUTPUT);
   pinMode(STEP_P, OUTPUT);
   pinMode(STEP_M, OUTPUT);
-  pinMode(PROBE, OUTPUT);
+  pinMode(ENA_P, OUTPUT);
+  pinMode(ENA_M, OUTPUT);
 
 //  motorPower(false);
   digitalWrite(STEP_M, LOW);
@@ -151,6 +152,9 @@ void setup()
   
   digitalWrite(STEP_P, HIGH);
   digitalWrite(DIR_P, HIGH);
+
+  digitalWrite(ENA_M, LOW);
+  digitalWrite(ENA_P, LOW);
     
   readEepromParams();
   
@@ -176,8 +180,7 @@ void loop()
   {
     if (spinupStep < spinupStopStep)
     {
-      int vel = map(spinupStep, 0, 1023, 0, MAX_VEL_INT);
-      int stepDelay = VEL_TO_STEP_DELAY[vel];
+      int stepDelay = VEL_TO_STEP_DELAY[spinupStep];
       motorStep(stepDelay);
 
       //if (curMillis - millisStart > 20)
@@ -209,10 +212,6 @@ void loop()
   else
   {
     lastPot = -1;
-#ifdef BOARD_REVB    
-    motorPower(false);
-#endif
-    isStepperMoving = false;
   }
   
   UserEvent e = readUserEvent(curMillis);
@@ -220,11 +219,11 @@ void loop()
   if (e == BTN_1_RELEASE && !isMotorSpinup && !isStepperMoving)
   {
     isMotorSpinup = true;
-    spinupStopStep = analogRead(POT_PIN);
-    spinupStep = max(spinupStopStep - 512, 0);
+    spinupStopStep = map(analogRead(POT_PIN), 0, 1023, 0, MAX_VEL_INT);
+    spinupStep = 0;
     //Serial.print(spinupStep); Serial.print(" "); Serial.println(spinupStopStep);
     millisStart = curMillis;
-#ifdef BOARD_REVB    
+#ifdef BOARD_REV_B    
     motorPower(true);
 #endif
   }
@@ -233,7 +232,7 @@ void loop()
     isStepperMoving = false;
     isMotorSpinup = false;
     spinupStep = 0;
-#ifdef BOARD_REVB    
+#ifdef BOARD_REV_B    
     motorPower(false);
 #endif  
   }

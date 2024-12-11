@@ -4,9 +4,11 @@
 #include <avr/io.h>
 
 #define MAJOR_V '1'
-#define MINOR_V '3'
+#define MINOR_V '6'
 #define STAGE_V 'B'
 #define SW_PN   'M'
+
+#define BOARD_REV_B
 
 #ifndef cbi
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
@@ -19,7 +21,8 @@
 #define DIR_M     11
 #define STEP_P    10
 #define STEP_M    9
-#define PROBE     8
+#define ENA_P     8
+#define ENA_M     7
 #define PHOTO_1   4
 #define PHOTO_2   5
 
