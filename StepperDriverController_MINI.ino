@@ -186,7 +186,7 @@ void loop()
       //if (curMillis - millisStart > 20)
       //{
       //  millisStart = curMillis;
-        spinupStep += 1;
+        spinupStep += 30;
       //}
     }
     else
