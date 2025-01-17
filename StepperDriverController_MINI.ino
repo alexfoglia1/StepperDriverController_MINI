@@ -186,7 +186,7 @@ void loop()
       //if (curMillis - millisStart > 20)
       //{
       //  millisStart = curMillis;
-        spinupStep += 30;
+        spinupStep += 1;
       //}
     }
     else
@@ -243,5 +243,5 @@ void loop()
     EEPROM_UPDATE = false;
   }
   
-  MAINT_Handler(&EEPROM_UPDATE, &isStepperMoving);
+  MAINT_Handler(&EEPROM_UPDATE, isStepperMoving ? &isStepperMoving : &isMotorSpinup);
 }
